@@ -25,6 +25,7 @@
     "@taiga-ui/icons": "^3.9.0",
     "@taiga-ui/kit": "^3.9.0",
     "@taiga-ui/styles": "^3.9.0",
+    "jsbarcode": "^3.11.5",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
