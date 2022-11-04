@@ -1,3 +1,191 @@
 <tui-root>
-	 <svg id="barcode"></svg>
+  <svg id="barcode"></svg>
+
+  <form [formGroup]="barcodeSetForm">
+    <div class="tui-form__row">
+      <div tuiGroup class="group">
+        <tui-input formControlName="text">
+          Text
+          <input tuiTextfield type="text" />
+        </tui-input>
+
+        <tui-select formControlName="format" class="formatSelector">
+          Format
+          <ng-template tuiDataList>
+            <tui-data-list>
+              <button
+                *ngFor="let item of formatList"
+                tuiOption
+                [value]="item.code"
+              >
+                {{ item.label }}
+              </button>
+            </tui-data-list>
+          </ng-template>
+        </tui-select>
+      </div>
+    </div>
+
+    <div class="tui-form__row tui-form__row_multi-fields">
+      <div class="tui-form__multi-field">
+        <tui-input-color
+          class="b-form"
+          [colors]="palette"
+          formControlName="lineColor"
+        >
+          Line color
+        </tui-input-color>
+      </div>
+      <div class="tui-form__multi-field">
+        <tui-input-color
+          class="b-form"
+          [colors]="palette"
+          formControlName="background"
+        >
+          Background color
+        </tui-input-color>
+      </div>
+    </div>
+
+    <div class="tui-form__row tui-form__row_multi-fields">
+      <div class="tui-form__multi-field">
+        <tui-input-slider
+          formControlName="height"
+          postfix="px"
+          [min]="50"
+          [max]="200"
+          [segments]="1"
+        >
+          Height
+        </tui-input-slider>
+      </div>
+      <div class="tui-form__multi-field">
+        <tui-input-slider
+          formControlName="width"
+          postfix="px"
+          [min]="1"
+          [max]="10"
+          [segments]="1"
+        >
+          Width
+        </tui-input-slider>
+      </div>
+    </div>
+
+    <div class="tui-form__row tui-form__row_multi-fields">
+      <div class="tui-form__multi-field">
+        <tui-input-slider
+          formControlName="margin"
+          postfix="px"
+          [min]="0"
+          [max]="25"
+          [segments]="1"
+        >
+          Margin
+        </tui-input-slider>
+      </div>
+      <div class="tui-form__multi-field"></div>
+    </div>
+
+    <div tuiGroup class="tui-form__row" [adaptive]="true" [collapsed]="true">
+      <tui-radio-block
+        contentAlign="right"
+        formControlName="displayValue"
+        [item]="false"
+        size="l"
+      >
+        Hide text
+      </tui-radio-block>
+      <tui-radio-block
+        contentAlign="right"
+        formControlName="displayValue"
+        [item]="true"
+        size="l"
+      >
+        Show text
+      </tui-radio-block>
+    </div>
+
+    <ng-container *ngIf="barcodeSetForm.controls.displayValue.value">
+      <div class="tui-form__row tui-form__row_multi-fields">
+        <div class="tui-form__multi-field">
+          <tui-input-slider
+            formControlName="fontSize"
+            postfix="px"
+            [min]="8"
+            [max]="36"
+            [segments]="1"
+          >
+            Font Size
+          </tui-input-slider>
+        </div>
+        <div class="tui-form__multi-field">
+          <tui-input-slider
+            formControlName="textMargin"
+            postfix="px"
+            [min]="-5"
+            [max]="40"
+            [segments]="1"
+          >
+            Text Margin
+          </tui-input-slider>
+        </div>
+      </div>
+
+      <div class="tui-form__row tui-form__row_multi-fields">
+        <div class="tui-form__multi-field">
+          <div
+            tuiGroup
+            class="tui-form__row"
+            [adaptive]="true"
+            [collapsed]="true"
+          >
+            <tui-radio-block
+              contentAlign="right"
+              formControlName="textAlign"
+              item="left"
+              size="l"
+            >
+              <div class="label">Text Align</div>
+              Left
+            </tui-radio-block>
+            <tui-radio-block
+              contentAlign="right"
+              formControlName="textAlign"
+              item="center"
+              size="l"
+            >
+              Center
+            </tui-radio-block>
+            <tui-radio-block
+              contentAlign="right"
+              formControlName="textAlign"
+              item="right"
+              size="l"
+            >
+              Right
+            </tui-radio-block>
+          </div>
+        </div>
+
+        <div class="tui-form__multi-field">
+          <tui-select formControlName="font">
+            Font
+            <ng-template tuiDataList>
+              <tui-data-list>
+                <button
+                  *ngFor="let item of fontList"
+                  tuiOption
+                  [value]="item"
+                  [ngStyle]="{ 'font-family': item }"
+                >
+                  {{ item }}
+                </button>
+              </tui-data-list>
+            </ng-template>
+          </tui-select>
+        </div>
+      </div>
+    </ng-container>
+  </form>
 </tui-root>
