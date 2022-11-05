@@ -4,13 +4,26 @@
   <form [formGroup]="barcodeSetForm">
     <div class="tui-form__row">
       <div tuiGroup class="group">
-        <tui-input formControlName="text">
-          Text
-          <input tuiTextfield type="text" />
+        <tui-input
+          formControlName="text"
+          class="b-form"
+          [tuiTextfieldCleaner]="true"
+          [tuiTextfieldCustomContent]="barcodeTextControl.valid ? '' : invalid"
+        >
+          <span [class.invalid]="!barcodeTextControl.valid">Text</span>
         </tui-input>
+        <ng-template #invalid>
+          <span class="invalid invalid-comment"
+            >Not valid data for this barcode type</span
+          >
+          <tui-svg
+            src="tuiIconCancel"
+            class="invalid invalid-icon tui-space_left-3"
+          ></tui-svg>
+        </ng-template>
 
         <tui-select formControlName="format" class="formatSelector">
-          Format
+          <span [class.invalid]="!barcodeTextControl.valid">Type</span>
           <ng-template tuiDataList>
             <tui-data-list>
               <button

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import JsBarcode from 'jsbarcode';
 import { FormControl, FormGroup } from '@angular/forms';
 import { defaultEditorColors } from '@taiga-ui/addon-editor';
@@ -12,6 +12,7 @@ interface IFormat {
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
   readonly palette = defaultEditorColors;
@@ -46,8 +47,8 @@ export class AppComponent implements OnInit {
   ];
 
   barcodeSetForm = new FormGroup({
+    text: new FormControl('1234567890128'),
     format: new FormControl('CODE128'),
-    text: new FormControl('test'),
     height: new FormControl(100),
     width: new FormControl(2.3),
     displayValue: new FormControl(false),
@@ -60,13 +61,24 @@ export class AppComponent implements OnInit {
     textAlign: new FormControl('right'),
   });
 
+  get barcodeTextControl() {
+    return this.barcodeSetForm.controls.text as FormControl;
+  }
   ngOnInit() {
     this.barcodeSetForm.valueChanges.subscribe((data) => {
       this.updateBarcodeImage(data);
     });
+    this.updateBarcodeImage(this.barcodeSetForm.value);
+  }
+
+  setTextValidateStatus(status: boolean) {
+    this.barcodeTextControl.setErrors(!!status ? null : { incorrect: true });
   }
 
   updateBarcodeImage(data: any) {
-    JsBarcode('#barcode', data.text, data);
+    JsBarcode('#barcode', data.text, {
+      ...data,
+      valid: this.setTextValidateStatus.bind(this),
+    });
   }
 }

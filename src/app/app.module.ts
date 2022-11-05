@@ -1,4 +1,11 @@
-import {TuiRootModule, TuiDialogModule, TuiLoaderModule, TuiDataListModule, TuiGroupModule} from "@taiga-ui/core";
+import {
+  TuiRootModule,
+  TuiDialogModule,
+  TuiLoaderModule,
+  TuiDataListModule,
+  TuiGroupModule,
+  TuiTextfieldControllerModule, TuiSvgModule
+} from "@taiga-ui/core";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -35,7 +42,9 @@ import {TuiInputColorModule} from "@taiga-ui/addon-editor";
     TuiInputColorModule,
     TuiRadioBlockModule,
     TuiGroupModule,
-    TuiCheckboxLabeledModule
+    TuiCheckboxLabeledModule,
+    TuiTextfieldControllerModule,
+    TuiSvgModule
   ],
   providers: [],
   bootstrap: [AppComponent]
