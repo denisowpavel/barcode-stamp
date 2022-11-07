@@ -1,0 +1,21 @@
+@import '@taiga-ui/core/styles/variables/media';
+:host {
+  .label {
+    font: var(--tui-font-text-s);
+    color: var(--tui-text-03);
+  }
+  .formatSelector {
+    max-width: 150px;
+  }
+  .invalid {
+    color: var(--tui-error-fill-night);
+    &-icon {
+      position: relative;
+    }
+    &-comment {
+      @media #{$tui-mobile}  {
+        display: none;
+      }
+    }
+  }
+}

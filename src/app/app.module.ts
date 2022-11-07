@@ -21,10 +21,14 @@ import {
 } from "@taiga-ui/kit";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TuiInputColorModule} from "@taiga-ui/addon-editor";
+import { CreateBarcodeComponent } from './components/create-barcode/create-barcode.component';
+import { AddBarcodeComponent } from './components/add-barcode/add-barcode.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CreateBarcodeComponent,
+    AddBarcodeComponent
   ],
   imports: [
     BrowserModule,
