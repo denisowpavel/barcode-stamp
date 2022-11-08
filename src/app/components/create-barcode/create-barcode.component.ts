@@ -2,23 +2,29 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  EventEmitter,
+  OnDestroy,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { BarcodeGeneratorService } from '@services/barcode-generator.service';
-import { CanvasService } from '@services/canvas.service'
+import { CanvasService } from '@services/canvas.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { IBarcodeSettings } from '@interfaces/barcode-settings';
-import {debounceTime} from "rxjs";
-
+import { debounceTime, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-create-barcode',
   templateUrl: './create-barcode.component.html',
   styleUrls: ['./create-barcode.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreateBarcodeComponent implements OnInit {
+export class CreateBarcodeComponent implements OnInit, OnDestroy {
+  ngUnsubscribe: Subject<void> = new Subject<void>();
   @ViewChild('canvas') canvas?: ElementRef;
+  @Output() public updateImage = new EventEmitter<string>();
+
   areAllImagesLoaded = false;
 
   constructor(
@@ -47,11 +53,16 @@ export class CreateBarcodeComponent implements OnInit {
 
   ngOnInit() {
     this.barcodeSetForm.valueChanges
-      .pipe(debounceTime(25))
+      .pipe(takeUntil(this.ngUnsubscribe), debounceTime(25))
       .subscribe((data) => {
         this.updateBarcodeImage(data);
       });
     this.updateBarcodeImage(this.barcodeSetForm.value);
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   ngAfterViewInit() {
@@ -73,7 +84,7 @@ export class CreateBarcodeComponent implements OnInit {
       ...data,
       valid: this.setTextValidateStatus.bind(this),
     } as IBarcodeSettings);
+
+    this.updateImage.emit(barCodeImage.src);
   }
-
-
 }
