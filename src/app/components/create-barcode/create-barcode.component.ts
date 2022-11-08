@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { BarcodeGeneratorService } from '@services/barcode-generator.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { IBarcodeSettings } from '@interfaces/barcode-settings';
@@ -10,7 +16,12 @@ import { IBarcodeSettings } from '@interfaces/barcode-settings';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateBarcodeComponent implements OnInit {
+  @ViewChild('canvas') canvas?: ElementRef;
+  ctx?: CanvasRenderingContext2D;
+  areAllImagesLoaded = false;
+
   constructor(public generatorService: BarcodeGeneratorService) {}
+
   barcodeSetForm = new FormGroup({
     text: new FormControl('1234567890128'),
     format: new FormControl('CODE128'),
@@ -37,14 +48,41 @@ export class CreateBarcodeComponent implements OnInit {
     this.updateBarcodeImage(this.barcodeSetForm.value);
   }
 
+  ngAfterViewInit() {
+    this.ctx = this.canvas?.nativeElement.getContext('2d');
+  }
+
   setTextValidateStatus(status: boolean) {
     this.barcodeTextControl.setErrors(!!status ? null : { incorrect: true });
   }
 
   updateBarcodeImage(data: any) {
-    this.generatorService.generate(data.text, {
+    let brcodeImage = new Image();
+    brcodeImage.onload = () => {
+      this.clearCanvas();
+      this.addImageCanvas(brcodeImage);
+    };
+    brcodeImage.src = this.generatorService.generate(data.text, {
       ...data,
       valid: this.setTextValidateStatus.bind(this),
     } as IBarcodeSettings);
+  }
+
+  addImageCanvas(image: HTMLImageElement) {
+    const canvasRect = this.canvas?.nativeElement.getBoundingClientRect();
+    this.ctx?.drawImage(
+      image,
+      (canvasRect.width-image.width)/2,
+      (canvasRect.height-image.height)/2,
+    );
+  }
+
+  clearCanvas() {
+    this.ctx?.clearRect(
+      0,
+      0,
+      this.canvas?.nativeElement.width,
+      this.canvas?.nativeElement.height
+    );
   }
 }

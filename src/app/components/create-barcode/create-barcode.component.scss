@@ -1,5 +1,8 @@
-@import '@taiga-ui/core/styles/variables/media';
+@import "@taiga-ui/core/styles/variables/media";
 :host {
+  canvas {
+    align-items: center;
+  }
   .label {
     font: var(--tui-font-text-s);
     color: var(--tui-text-03);
@@ -13,7 +16,7 @@
       position: relative;
     }
     &-comment {
-      @media #{$tui-mobile}  {
+      @media #{$tui-mobile} {
         display: none;
       }
     }

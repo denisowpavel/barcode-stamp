@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { defaultEditorColors } from '@taiga-ui/addon-editor';
 import { IFormatItem, IBarcodeSettings } from '@interfaces/index';
 // @ts-ignore
@@ -40,9 +41,11 @@ export class BarcodeGeneratorService {
     { code: 'MSI1110', label: 'MSI1110' },
     { code: 'pharmacode', label: 'Pharmacode' },
   ];
-  constructor() {}
+  constructor(@Inject(DOCUMENT) private document: Document) {}
 
-  public generate(value: string, settings: IBarcodeSettings): void {
-    return JsBarcode('#barcode', value, settings);
+  public generate(value: string, settings: IBarcodeSettings): any {
+    const canvas = this.document.createElement('canvas');
+    JsBarcode(canvas, value, settings);
+    return canvas.toDataURL("image/png");
   }
 }

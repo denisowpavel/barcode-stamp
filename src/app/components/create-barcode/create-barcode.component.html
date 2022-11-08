@@ -1,5 +1,4 @@
-  <svg id="barcode"></svg>
-
+<canvas #canvas width="500" height="200" style="background: yellow"></canvas>
   <form [formGroup]="barcodeSetForm">
     <div class="tui-form__row">
       <div tuiGroup class="group">
@@ -65,7 +64,7 @@
           formControlName="height"
           postfix="px"
           [min]="50"
-          [max]="200"
+          [max]="100"
           [segments]="1"
         >
           Height
