@@ -1,7 +1,10 @@
 @import "@taiga-ui/core/styles/variables/media";
 :host {
-  canvas {
+  .canvas-wrapper {
+    display: flex;
     align-items: center;
+    justify-content: center;
+    padding: 10px;
   }
   .label {
     font: var(--tui-font-text-s);

@@ -6,8 +6,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import { BarcodeGeneratorService } from '@services/barcode-generator.service';
+import { CanvasService } from '@services/canvas.service'
 import { FormControl, FormGroup } from '@angular/forms';
 import { IBarcodeSettings } from '@interfaces/barcode-settings';
+import {debounceTime} from "rxjs";
 
 @Component({
   selector: 'app-create-barcode',
@@ -17,10 +19,12 @@ import { IBarcodeSettings } from '@interfaces/barcode-settings';
 })
 export class CreateBarcodeComponent implements OnInit {
   @ViewChild('canvas') canvas?: ElementRef;
-  ctx?: CanvasRenderingContext2D;
   areAllImagesLoaded = false;
 
-  constructor(public generatorService: BarcodeGeneratorService) {}
+  constructor(
+    public generatorService: BarcodeGeneratorService,
+    private canvasService: CanvasService
+  ) {}
 
   barcodeSetForm = new FormGroup({
     text: new FormControl('1234567890128'),
@@ -42,14 +46,16 @@ export class CreateBarcodeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.barcodeSetForm.valueChanges.subscribe((data) => {
-      this.updateBarcodeImage(data);
-    });
+    this.barcodeSetForm.valueChanges
+      .pipe(debounceTime(25))
+      .subscribe((data) => {
+        this.updateBarcodeImage(data);
+      });
     this.updateBarcodeImage(this.barcodeSetForm.value);
   }
 
   ngAfterViewInit() {
-    this.ctx = this.canvas?.nativeElement.getContext('2d');
+    this.canvasService.initCanvas(this.canvas);
   }
 
   setTextValidateStatus(status: boolean) {
@@ -57,32 +63,17 @@ export class CreateBarcodeComponent implements OnInit {
   }
 
   updateBarcodeImage(data: any) {
-    let brcodeImage = new Image();
-    brcodeImage.onload = () => {
-      this.clearCanvas();
-      this.addImageCanvas(brcodeImage);
+    let barCodeImage = new Image();
+    barCodeImage.onload = () => {
+      this.canvasService.clearCanvas();
+      this.canvasService.addBg();
+      this.canvasService.addImage(barCodeImage);
     };
-    brcodeImage.src = this.generatorService.generate(data.text, {
+    barCodeImage.src = this.generatorService.generate(data.text, {
       ...data,
       valid: this.setTextValidateStatus.bind(this),
     } as IBarcodeSettings);
   }
 
-  addImageCanvas(image: HTMLImageElement) {
-    const canvasRect = this.canvas?.nativeElement.getBoundingClientRect();
-    this.ctx?.drawImage(
-      image,
-      (canvasRect.width-image.width)/2,
-      (canvasRect.height-image.height)/2,
-    );
-  }
 
-  clearCanvas() {
-    this.ctx?.clearRect(
-      0,
-      0,
-      this.canvas?.nativeElement.width,
-      this.canvas?.nativeElement.height
-    );
-  }
 }
