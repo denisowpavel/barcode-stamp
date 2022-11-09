@@ -25,6 +25,9 @@ export class AppComponent implements AfterViewInit {
     {}
   );
   @ViewChild('canvas') canvas?: ElementRef;
+  barCodeImage?: HTMLImageElement;
+  docImage?: HTMLImageElement;
+
   constructor(
     private canvasService: CanvasService,
     @Inject(TuiDialogService) private readonly dialogService: TuiDialogService,
@@ -44,20 +47,18 @@ export class AppComponent implements AfterViewInit {
   }
 
   public addBarcodeImage(barCode64: string) {
-    let barCodeImage = new Image();
-    barCodeImage.onload = () => {
-      this.canvasService.addImage(barCodeImage);
+    this.barCodeImage = new Image();
+    this.barCodeImage.onload = () => {
+      this.canvasService.renderMainScene(this.docImage, this.barCodeImage);
     };
-    barCodeImage.src = barCode64;
+    this.barCodeImage.src = barCode64;
   }
 
   public setDocImage(document64: string) {
-    let docImage = new Image();
-    docImage.onload = () => {
-      this.canvasService.clearCanvas();
-      this.canvasService.addBg();
-      this.canvasService.addImage(docImage);
+    this.docImage = new Image();
+    this.docImage.onload = () => {
+      this.canvasService.renderMainScene(this.docImage, this.barCodeImage);
     };
-    docImage.src = document64;
+    this.docImage.src = document64;
   }
 }
