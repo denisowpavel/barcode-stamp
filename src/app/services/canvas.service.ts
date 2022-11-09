@@ -1,4 +1,5 @@
 import { ElementRef, Injectable } from '@angular/core';
+import { IGraphicObject } from '@interfaces/graphic-object';
 
 @Injectable({
   providedIn: 'root',
@@ -6,6 +7,12 @@ import { ElementRef, Injectable } from '@angular/core';
 export class CanvasService {
   canvas?: ElementRef;
   ctx?: CanvasRenderingContext2D;
+  height: number = 0;
+  width: number = 0;
+  barCode: IGraphicObject | null = null;
+  isDragging = false;
+  cacheDocImage?: HTMLImageElement;
+  cacheBarCodeImage?: HTMLImageElement;
 
   constructor() {}
 
@@ -17,22 +24,70 @@ export class CanvasService {
     this.canvas = canvas;
     this.ctx = this.canvas?.nativeElement.getContext('2d');
 
-    this.canvas.nativeElement.onmousedown = this.drag;
-    this.canvas.nativeElement.ontouchstart = this.drag;
-    this.canvas.nativeElement.onmouseup = this.drop;
-    this.canvas.nativeElement.ontouchmove = this.move;
-    this.canvas.nativeElement.ontouchend = this.drop;
-    this.canvas.nativeElement.ontouchcancel = this.drop;
-    this.canvas.nativeElement.onmousemove = this.move;
+    this.canvas.nativeElement.onmousedown = this.drag.bind(this);
+    this.canvas.nativeElement.ontouchstart = this.drag.bind(this);
+    this.canvas.nativeElement.onmouseup = this.drop.bind(this);
+    this.canvas.nativeElement.ontouchmove = this.move.bind(this);
+    this.canvas.nativeElement.ontouchend = this.drop.bind(this);
+    this.canvas.nativeElement.ontouchcancel = this.drop.bind(this);
+    this.canvas.nativeElement.onmousemove = this.move.bind(this);
   }
+
   private drag(e: any) {
-    //console.log('drag', e);
+    if (this.isHoverObject(this.barCode, e.clientX, e.clientY)) {
+      this.isDragging = true;
+      this.setCursor();
+    }
   }
-  private drop(e: any) {
-    //console.log('drop', e);
+
+  private drop(e: TouchEvent | MouseEvent) {
+    this.isDragging = false;
+    this.setCursor();
   }
+
   private move(e: any) {
-    //console.log('move', e);
+    console.log(e)
+    e.preventDefault();
+    this.setCursor(
+      this.isHoverObject(this.barCode, e.clientX, e.clientY)
+        ? 'grab'
+        : 'default'
+    );
+    if (this.isDragging && this.barCode) {
+      this.barCode.top += e.movementY;
+      this.barCode.left += e.movementX;
+      this.renderMainScene(this.cacheDocImage, this.cacheBarCodeImage)
+    }
+  }
+  public setCursor(cursor = 'default') {
+    if (this.isDragging) {
+      cursor = 'grabbing';
+    }
+    document.body.style.cursor = cursor;
+  }
+
+  private isHoverObject(
+    obj: IGraphicObject | null,
+    x: number,
+    y: number
+  ): boolean {
+    if (!obj) {
+      return false;
+    }
+    return (
+      x > obj.left &&
+      x < obj.left + obj.width &&
+      y > obj.top &&
+      y < obj.top + obj.height
+    );
+  }
+  public updateSelfSize(): void {
+    const canvasRect = this.canvas?.nativeElement.getBoundingClientRect();
+    if (!canvasRect) {
+      return;
+    }
+    this.height = canvasRect.height;
+    this.width = canvasRect.width;
   }
 
   public clearCanvas(): void {
@@ -48,10 +103,10 @@ export class CanvasService {
     if (!this.ctx) {
       return;
     }
-    const canvasRect = this.canvas?.nativeElement.getBoundingClientRect();
     const rectSize = 10;
-    for (let i = 0; i < canvasRect.height / rectSize; i++) {
-      for (let j = 0; j < canvasRect.width / rectSize; j++) {
+    this.updateSelfSize();
+    for (let i = 0; i < this.height / rectSize; i++) {
+      for (let j = 0; j < this.width / rectSize; j++) {
         this.ctx.beginPath();
         this.ctx.fillStyle = ['#f3f3f3', '#ccc'][(i + j) % 2];
         this.ctx.fillRect(j * rectSize, i * rectSize, rectSize, rectSize);
@@ -64,11 +119,11 @@ export class CanvasService {
     if (!image) {
       return;
     }
-    const canvasRect = this.canvas?.nativeElement.getBoundingClientRect();
+    this.updateSelfSize();
     this.ctx?.drawImage(
       image,
-      (canvasRect.width - image.width) / 2,
-      (canvasRect.height - image.height) / 2
+      (this.width - image.width) / 2,
+      (this.height - image.height) / 2
     );
   }
 
@@ -78,12 +133,23 @@ export class CanvasService {
   ): void {
     this.clearCanvas();
     this.addBg();
-    //const canvasRect = this.canvas?.nativeElement.getBoundingClientRect();
     if (docImage) {
       this.ctx?.drawImage(docImage, 0, 0);
+      this.cacheDocImage = docImage;
     }
     if (barCodeImage) {
-      this.ctx?.drawImage(barCodeImage, 0, 0);
+      this.barCode = {
+        top: this.barCode
+          ? this.barCode.top
+          : (this.height - barCodeImage.height) / 2,
+        left: this.barCode
+          ? this.barCode.left
+          : (this.width - barCodeImage.width) / 2,
+        height: barCodeImage.height,
+        width: barCodeImage.width,
+      };
+      this.ctx?.drawImage(barCodeImage, this.barCode.left, this.barCode.top);
+      this.cacheBarCodeImage = barCodeImage;
     }
   }
 }

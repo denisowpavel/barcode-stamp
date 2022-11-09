@@ -64,6 +64,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     }
     this.canvas.nativeElement.width = window.innerWidth;
     this.canvas.nativeElement.height = window.innerHeight-72;
+    this.canvasService.updateSelfSize();
     this.canvasService.renderMainScene(this.docImage, this.barCodeImage);
   }
   showDialog(): void {
