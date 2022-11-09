@@ -11,6 +11,11 @@
     </button>
   </tui-tabs>
 </div>
+<app-image-uploader
+  *ngIf="activeItemIndex === 0"
+  (updateImage)="setImage($event)"
+>
+</app-image-uploader>
 <app-create-barcode
   *ngIf="activeItemIndex === 1"
   (updateImage)="setImage($event)"

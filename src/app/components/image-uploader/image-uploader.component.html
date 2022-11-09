@@ -1,0 +1,29 @@
+<div class="preview-image" *ngIf="image64">
+  <img [src]="image64" />
+</div>
+<tui-input-files
+  accept="image/*"
+  [formControl]="control"
+  (reject)="onReject($event)"
+></tui-input-files>
+
+<tui-files class="tui-space_top-1">
+  <tui-file
+    *ngIf="loadedFiles$ | async as file"
+    [file]="file"
+    (removed)="removeFile()"
+  ></tui-file>
+
+  <tui-file
+    *ngIf="rejectedFiles$ | async as file"
+    state="error"
+    [file]="file"
+    (removed)="clearRejected()"
+  ></tui-file>
+
+  <tui-file
+    *ngIf="loadingFiles$ | async as file"
+    state="loading"
+    [file]="file"
+  ></tui-file>
+</tui-files>

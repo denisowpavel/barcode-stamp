@@ -14,7 +14,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import {
   TuiCheckboxLabeledModule,
-  TuiDataListWrapperModule,
+  TuiDataListWrapperModule, TuiInputFilesModule,
   TuiInputModule,
   TuiInputSliderModule,
   TuiRadioBlockModule,
@@ -25,9 +25,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiInputColorModule } from '@taiga-ui/addon-editor';
 import { CreateBarcodeComponent } from './components/create-barcode/create-barcode.component';
 import { AddBarcodeComponent } from './components/add-barcode/add-barcode.component';
+import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
 
 @NgModule({
-  declarations: [AppComponent, CreateBarcodeComponent, AddBarcodeComponent],
+  declarations: [AppComponent, CreateBarcodeComponent, AddBarcodeComponent, ImageUploaderComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -49,6 +50,7 @@ import { AddBarcodeComponent } from './components/add-barcode/add-barcode.compon
     TuiTextfieldControllerModule,
     TuiSvgModule,
     TuiTabsModule,
+    TuiInputFilesModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
