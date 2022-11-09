@@ -11,11 +11,21 @@
         min-width: 150px;
       }
     }
-    .add-button {
+    .buttons {
       margin-left: auto;
+    }
+    .add-button,
+    .save-button {
+      margin: 2px;
       @media #{$tui-mobile} {
-      ::ng-deep .t-icon {
+        & .label {
           display: none;
+        }
+        ::ng-deep .t-left {
+          margin: 0;
+        }
+        ::ng-deep .t-wrapper {
+          padding: 0 10px;
         }
       }
     }

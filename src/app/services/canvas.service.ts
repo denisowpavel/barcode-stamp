@@ -187,10 +187,13 @@ export class CanvasService {
 
   public renderMainScene(
     docImage?: HTMLImageElement,
-    barCodeImage?: HTMLImageElement
+    barCodeImage?: HTMLImageElement,
+    noBg = false
   ): void {
     this.clearCanvas();
-    this.addBg();
+    if (!noBg) {
+      this.addBg();
+    }
     if (docImage) {
       if (!docImage.width || !this.width || !docImage.height || !this.height) {
         // for mobile photo crach
@@ -206,7 +209,13 @@ export class CanvasService {
           w = Math.min(docImage.width, this.width);
           h = w / imageRate;
         }
-        this.ctx?.drawImage(docImage, (this.width - w) / 2, (this.height - h) / 2, w, h);
+        this.ctx?.drawImage(
+          docImage,
+          (this.width - w) / 2,
+          (this.height - h) / 2,
+          w,
+          h
+        );
       }
 
       this.cacheDocImage = docImage;

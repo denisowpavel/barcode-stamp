@@ -7,17 +7,31 @@
     <div tuiMode="onDark" class="table-bars-wrap">
       <app-image-uploader class="uploader" (updateImage)="setDocImage($event)">
       </app-image-uploader>
-      <button
-        tuiButton
-        type="button"
-        appearance="outline"
-        size="m"
-        icon="tuiIconPlus"
-        class="add-button"
-        (click)="showDialog()"
-      >
-        Add Barcode
-      </button>
+      <div class="buttons">
+        <button
+          tuiButton
+          type="button"
+          appearance="outline"
+          size="m"
+          icon="tuiIconPlus"
+          class="add-button"
+          (click)="barcodeAddDialog()"
+        >
+          <span class="label">Add Barcode</span>
+        </button>
+        <button
+          tuiButton
+          type="button"
+          appearance="outline"
+          size="m"
+          icon="tuiIconDownload"
+          class="save-button"
+          [disabled]="!docImage || !barCodeImage"
+          (click)="save()"
+        >
+          <span class="label">Save</span>
+        </button>
+      </div>
     </div>
   </ng-template>
   <tui-table-bars-host></tui-table-bars-host>

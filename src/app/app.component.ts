@@ -16,6 +16,7 @@ import { AddBarcodeComponent } from '@components/add-barcode/add-barcode.compone
 import { CanvasService } from '@services/canvas.service';
 import { TuiTableBarsService } from '@taiga-ui/addon-tablebars';
 import { PolymorpheusContent } from '@tinkoff/ng-polymorpheus';
+import { HelpersService } from '@services/helpers.service';
 
 @Component({
   selector: 'app-root',
@@ -31,7 +32,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   );
   @ViewChild('canvas') canvas?: ElementRef;
   @ViewChild(`tableBarTemplate`) tableBarTemplate: PolymorpheusContent = ``;
-  //this.updateCanvasSize()
+
   barCodeImage?: HTMLImageElement;
   docImage?: HTMLImageElement;
 
@@ -40,7 +41,8 @@ export class AppComponent implements AfterViewInit, OnInit {
     @Inject(Injector) private readonly injector: Injector,
     @Inject(TuiTableBarsService)
     private readonly tableBarsService: TuiTableBarsService,
-    private canvasService: CanvasService
+    private canvasService: CanvasService,
+    private helpersService: HelpersService
   ) {}
 
   ngOnInit() {
@@ -63,11 +65,23 @@ export class AppComponent implements AfterViewInit, OnInit {
       return;
     }
     this.canvas.nativeElement.width = window.innerWidth;
-    this.canvas.nativeElement.height = window.innerHeight-72;
+    this.canvas.nativeElement.height = window.innerHeight - 72;
     this.canvasService.updateSelfSize();
     this.canvasService.renderMainScene(this.docImage, this.barCodeImage);
   }
-  showDialog(): void {
+  save(): void {
+    if (!this.canvas?.nativeElement) {
+      return;
+    }
+    this.canvasService.renderMainScene(this.docImage, this.barCodeImage, true);
+    this.helpersService.saveCanvasAsFile(
+      this.canvas.nativeElement,
+      'documentWithBarcode.png'
+    );
+    this.canvasService.renderMainScene(this.docImage, this.barCodeImage);
+  }
+
+  barcodeAddDialog(): void {
     this.dialog.subscribe({
       next: (data) => {
         this.addBarcodeImage(data);
