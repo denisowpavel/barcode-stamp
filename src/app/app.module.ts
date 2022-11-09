@@ -5,7 +5,8 @@ import {
   TuiDataListModule,
   TuiGroupModule,
   TuiTextfieldControllerModule,
-  TuiSvgModule, TuiButtonModule,
+  TuiSvgModule,
+  TuiButtonModule, TuiThemeNightModule, TuiModeModule,
 } from '@taiga-ui/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
@@ -14,7 +15,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import {
   TuiCheckboxLabeledModule,
-  TuiDataListWrapperModule, TuiInputFilesModule,
+  TuiDataListWrapperModule,
+  TuiInputFilesModule,
   TuiInputModule,
   TuiInputSliderModule,
   TuiRadioBlockModule,
@@ -26,9 +28,15 @@ import { TuiInputColorModule } from '@taiga-ui/addon-editor';
 import { CreateBarcodeComponent } from './components/create-barcode/create-barcode.component';
 import { AddBarcodeComponent } from './components/add-barcode/add-barcode.component';
 import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
+import { TuiTableBarsHostModule } from '@taiga-ui/addon-tablebars';
 
 @NgModule({
-  declarations: [AppComponent, CreateBarcodeComponent, AddBarcodeComponent, ImageUploaderComponent],
+  declarations: [
+    AppComponent,
+    CreateBarcodeComponent,
+    AddBarcodeComponent,
+    ImageUploaderComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -51,6 +59,9 @@ import { ImageUploaderComponent } from './components/image-uploader/image-upload
     TuiSvgModule,
     TuiTabsModule,
     TuiInputFilesModule,
+    TuiTableBarsHostModule,
+    TuiThemeNightModule,
+    TuiModeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

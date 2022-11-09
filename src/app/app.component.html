@@ -1,9 +1,24 @@
 <tui-root>
   <div class="canvas-wrapper">
-    <canvas #canvas width="800" height="600"></canvas>
+    <canvas #canvas width="360" height="600" style="background: aqua"></canvas>
   </div>
-  <button tuiButton type="button" size="m" (click)="showDialog()">Add Barcode</button>
 
-  <app-image-uploader (updateImage)="setDocImage($event)" >
-  </app-image-uploader>
+  <ng-template #tableBarTemplate let-close>
+    <div tuiMode="onDark" class="table-bars-wrap">
+      <app-image-uploader class="uploader" (updateImage)="setDocImage($event)">
+      </app-image-uploader>
+      <button
+        tuiButton
+        type="button"
+        appearance="outline"
+        size="m"
+        icon="tuiIconPlus"
+        class="add-button"
+        (click)="showDialog()"
+      >
+        Add Barcode
+      </button>
+    </div>
+  </ng-template>
+  <tui-table-bars-host></tui-table-bars-host>
 </tui-root>

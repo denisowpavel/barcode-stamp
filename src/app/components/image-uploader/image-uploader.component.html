@@ -7,7 +7,7 @@
   (reject)="onReject($event)"
 ></tui-input-files>
 
-<tui-files class="tui-space_top-1">
+<tui-files class="tui-space_top-1" [class.is-hidden]="!showsPreview">
   <tui-file
     *ngIf="loadedFiles$ | async as file"
     [file]="file"

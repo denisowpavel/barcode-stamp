@@ -16,6 +16,23 @@ export class CanvasService {
     }
     this.canvas = canvas;
     this.ctx = this.canvas?.nativeElement.getContext('2d');
+
+    this.canvas.nativeElement.onmousedown = this.drag;
+    this.canvas.nativeElement.ontouchstart = this.drag;
+    this.canvas.nativeElement.onmouseup = this.drop;
+    this.canvas.nativeElement.ontouchmove = this.move;
+    this.canvas.nativeElement.ontouchend = this.drop;
+    this.canvas.nativeElement.ontouchcancel = this.drop;
+    this.canvas.nativeElement.onmousemove = this.move;
+  }
+  private drag(e: any) {
+    //console.log('drag', e);
+  }
+  private drop(e: any) {
+    //console.log('drop', e);
+  }
+  private move(e: any) {
+    //console.log('move', e);
   }
 
   public clearCanvas(): void {
