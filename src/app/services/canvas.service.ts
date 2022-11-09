@@ -192,7 +192,23 @@ export class CanvasService {
     this.clearCanvas();
     this.addBg();
     if (docImage) {
-      this.ctx?.drawImage(docImage, 0, 0);
+      if (!docImage.width || !this.width || !docImage.height || !this.height) {
+        // for mobile photo crach
+        this.ctx?.drawImage(docImage, 0, 0);
+      } else {
+        const screenRate = this.width / this.height;
+        const imageRate = docImage.width / docImage.height;
+        let w, h;
+        if (screenRate > imageRate) {
+          h = Math.min(docImage.height, this.height);
+          w = h * imageRate;
+        } else {
+          w = Math.min(docImage.width, this.width);
+          h = w / imageRate;
+        }
+        this.ctx?.drawImage(docImage, (this.width - w) / 2, (this.height - h) / 2, w, h);
+      }
+
       this.cacheDocImage = docImage;
     }
     if (barCodeImage) {
