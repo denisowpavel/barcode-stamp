@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
@@ -14,13 +15,17 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { IBarcodeSettings } from '@interfaces/barcode-settings';
 import { debounceTime, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 @Component({
   selector: 'app-create-barcode',
   templateUrl: './create-barcode.component.html',
   styleUrls: ['./create-barcode.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [CanvasService],
 })
-export class CreateBarcodeComponent implements OnInit, OnDestroy {
+export class CreateBarcodeComponent
+  implements OnInit, OnDestroy, AfterViewInit
+{
   ngUnsubscribe: Subject<void> = new Subject<void>();
   @ViewChild('canvas') canvas?: ElementRef;
   @Output() public updateImage = new EventEmitter<string>();

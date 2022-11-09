@@ -3,10 +3,9 @@ import {
   Component,
   Inject,
   OnInit,
-  TemplateRef,
 } from '@angular/core';
 import { POLYMORPHEUS_CONTEXT } from '@tinkoff/ng-polymorpheus';
-import { TuiDialogContext, TuiDialogService } from '@taiga-ui/core';
+import { TuiDialogContext } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-add-barcode',

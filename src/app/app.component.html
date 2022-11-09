@@ -1,10 +1,9 @@
 <tui-root>
-<button
-    tuiButton
-    type="button"
-    size="m"
-    (click)="showDialog()"
->
-    Show
-</button>
+  <div class="canvas-wrapper">
+    <canvas #canvas width="800" height="600"></canvas>
+  </div>
+  <button tuiButton type="button" size="m" (click)="showDialog()">Add Barcode</button>
+
+  <app-image-uploader (updateImage)="setDocImage($event)" >
+  </app-image-uploader>
 </tui-root>

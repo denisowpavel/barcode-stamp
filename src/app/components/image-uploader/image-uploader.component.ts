@@ -1,7 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
+  EventEmitter, Input,
   OnInit,
   Output,
 } from '@angular/core';
@@ -11,6 +11,8 @@ import { TuiFileLike } from '@taiga-ui/kit';
 import { Observable, of, Subject, timer } from 'rxjs';
 import { finalize, switchMap } from 'rxjs/operators';
 
+
+
 @Component({
   selector: 'app-image-uploader',
   templateUrl: './image-uploader.component.html',
@@ -18,6 +20,7 @@ import { finalize, switchMap } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImageUploaderComponent implements OnInit {
+  @Input() showsPreview = false;
   @Output() public updateImage = new EventEmitter<string>();
   image64: string = '';
 
