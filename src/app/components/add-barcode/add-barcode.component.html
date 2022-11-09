@@ -1,3 +1,33 @@
-<p>add-barcode works!</p>
-<app-create-barcode>
+<div class="tab-wrapper">
+  <h1 class="tui-text_h3 title">Add Barcode</h1>
+  <tui-tabs [(activeItemIndex)]="activeItemIndex">
+    <button tuiTab>
+      <tui-svg src="tuiIconUpload" class="tui-space_right-2"></tui-svg>
+      Upload
+    </button>
+    <button tuiTab>
+      <tui-svg src="tuiIconEdit" class="tui-space_right-2"></tui-svg>
+      Create
+    </button>
+  </tui-tabs>
+</div>
+<app-create-barcode
+  *ngIf="activeItemIndex === 1"
+  (updateImage)="setImage($event)"
+>
 </app-create-barcode>
+
+<div class="btn-wrapper">
+  <button
+    tuiButton
+    type="button"
+    appearance="primary"
+    [disabled]="!image64"
+    (click)="submit()"
+  >
+    Add
+  </button>
+  <button tuiButton type="button" appearance="secondary" (click)="cancel()">
+    Cancel
+  </button>
+</div>

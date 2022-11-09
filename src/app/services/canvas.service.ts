@@ -33,7 +33,6 @@ export class CanvasService {
     }
     const canvasRect = this.canvas?.nativeElement.getBoundingClientRect();
     const rectSize = 10;
-    console.log(canvasRect.width)
     for (let i = 0; i < (canvasRect.height/rectSize); i++) {
       for (let j = 0; j < (canvasRect.width/rectSize); j++) {
         this.ctx.beginPath();
