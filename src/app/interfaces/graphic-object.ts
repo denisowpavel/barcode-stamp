@@ -3,4 +3,6 @@ export interface IGraphicObject {
   left: number;
   height: number;
   width: number;
+  scale: number;
+  rotation: number;
 }
